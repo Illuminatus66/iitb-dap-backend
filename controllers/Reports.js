@@ -1,37 +1,28 @@
-import { Request, Response } from "express";
 import axios from "axios";
 import dayjs from "dayjs";
-import { Report } from "../models/Reports.js";
-import {
-  AudioUploadRequest,
-  AudioUploadResponse,
-  DetailsUploadRequest,
-  DetailsUploadResponse,
-  ReportGenerationRequest,
-  ReportGenerationResponse,
-} from "./types.js";
+import Report from "../models/Reports.js";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-export const fetchAllReports = async (req: Request, res: Response) => {
+export const fetchAllReports = async (req, res) => {
   try {
     const reports = await Report.find({});
     res.status(200).json(reports);
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error fetching reports:", error);
     res.status(500).json({ message: error.message || "Internal Server Error" });
   }
 };
 
 export const uploadDetailsWithoutAudio = async (
-  req: Request,
-  res: Response
+  req,
+  res
 ) => {
   try {
-    const detailsUploadData: DetailsUploadRequest = req.body;
+    const detailsUploadData = req.body;
 
     // A new document is created with both flags set to false
     // since no audio is being uploaded in this controller
@@ -43,8 +34,8 @@ export const uploadDetailsWithoutAudio = async (
       is_report_generated: false,
     });
 
-    const responseData: DetailsUploadResponse = {
-      _id: String(newReport._id),
+    const responseData= {
+      _id: newReport._id,
       uid: newReport.uid,
       name: newReport.name,
       is_audio_uploaded: newReport.is_audio_uploaded,
@@ -53,15 +44,15 @@ export const uploadDetailsWithoutAudio = async (
     };
 
     res.status(201).json(responseData);
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error in uploadDetailsWithoutAudio:", error);
     res.status(500).json({ message: error.message || "Internal Server Error" });
   }
 };
 
-export const uploadAudio = async (req: Request, res: Response) => {
+export const uploadAudio = async (req, res) => {
   try {
-    const audioUploadData: AudioUploadRequest = req.body;
+    const audioUploadData = req.body;
 
     // This calls IITB's S3 bucket to upload a base64 encoded audio file.
     // The documentation suggests that the file should be in the "audioFile" field.
@@ -78,8 +69,8 @@ export const uploadAudio = async (req: Request, res: Response) => {
     );
 
     // Extract the s3Url from the external API's response.
-    const s3Url: string = s3Response.data.s3Url;
-    let reportDoc: any;
+    const s3Url = s3Response.data.s3Url;
+    let reportDoc;
 
     // If _id is provided, we update an existing document.
     if (audioUploadData._id) {
@@ -111,8 +102,8 @@ export const uploadAudio = async (req: Request, res: Response) => {
       throw new Error("Unable to update or create report document");
     }
 
-    const responseData: AudioUploadResponse = {
-      _id: String(reportDoc._id),
+    const responseData = {
+      _id: reportDoc._id,
       uid: reportDoc.uid,
       name: reportDoc.name,
       is_audio_uploaded: reportDoc.is_audio_uploaded,
@@ -122,27 +113,27 @@ export const uploadAudio = async (req: Request, res: Response) => {
     };
 
     res.status(200).json(responseData);
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error in uploadAudioController:", error);
     res.status(500).json({ message: error.message || "Internal Server Error" });
   }
 };
 
-export const triggerReportGeneration = async (req: Request, res: Response) => {
+export const triggerReportGeneration = async (req, res) => {
   try {
     const {
       _id,
       audio_url,
       reference_text_id,
       request_time,
-    }: ReportGenerationRequest = req.body;
+    } = req.body;
 
     if (!audio_url.startsWith("https://") || !audio_url.includes("s3")) {
       return res.status(400).json({ message: "Invalid S3 URL" });
     }
 
-    const sasApiUrl = String(process.env.SAS_API_URL);
-    const sasApiKey = String(process.env.SAS_API_KEY);
+    const sasApiUrl = process.env.SAS_API_URL;
+    const sasApiKey = process.env.SAS_API_KEY;
 
     if (!sasApiKey) {
       return res.status(400).json({ message: "Missing SAS API Key" });
@@ -165,7 +156,7 @@ export const triggerReportGeneration = async (req: Request, res: Response) => {
       )
       .catch((error) => {
         if (error.code === "ECONNABORTED") {
-          throw new Error("SAS API timeout: No response from the server.");
+          throw new error("SAS API timeout: No response from the server.");
         }
       });
 
@@ -212,14 +203,14 @@ export const triggerReportGeneration = async (req: Request, res: Response) => {
       request_time,
     };
 
-    const updatedReport: ReportGenerationResponse | null =
+    const updatedReport =
       await Report.findByIdAndUpdate(_id, updateData, { new: true });
     if (!updatedReport) {
       return res.status(404).json({ message: "Report not found" });
     }
 
     res.status(200).json(updatedReport);
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error in triggerReportGenerationController:", error);
     res.status(500).json({ message: error.message || "Internal Server Error" });
   }

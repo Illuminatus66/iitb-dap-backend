@@ -2,7 +2,7 @@
   "name": "iitb_dap_backend",
   "version": "1.0.0",
   "description": "A Node.js backend for iitb-dap SAS project",
-  "main": "index.ts",
+  "main": "index.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,8 +12,6 @@
     "url": "git+https://github.com/Illuminatus66/iitb-dap-backend.git"
   },
   "dependencies": {
-    "@types/cors": "^2.8.17",
-    "@types/express": "^5.0.0",
     "axios": "^1.7.9",
     "cors": "^2.8.5",
     "dayjs": "^1.11.13",

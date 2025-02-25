@@ -1,6 +1,6 @@
 # Node Backend API
 
-A Node.js backend project built with Express, Mongoose, and TypeScript that handles report creation, audio uploads, and report generation via the Speech Assessment Service (SAS) API.
+A Node.js backend project built with Express, Mongoose, and Javascript that handles report creation, audio uploads, and report generation via the Speech Assessment Service (SAS) API.
 
 ## Table of Contents
 
@@ -77,16 +77,15 @@ Make sure to replace the placeholder values with your actual credentials and URL
 iitb_dap_backend/
 |
 │── controllers/
-│   │── reportController.ts       # Contains endpoints for handling reports
-|   └──types.ts                   # Type definitions for request and response payloads
+│   └── Reports.js       # Contains endpoints for handling reports
 │── models/
-│   └── Reports.ts                # Mongoose schema for reports
+│   └── Reports.js       # Mongoose schema for reports
 │── routes/
-│   └── reportRoutes.ts           # Express routes for the API
-│── index.ts                      # Express app initialization
-├── .env                          # Environment variables
+│   └── Reports.js       # Express routes for the API
+│── index.js             # Express app initialization
+├── .env                 # Environment variables
 ├── package.json
-├── tsconfig.json                 # TypeScript configuration
+├── Procfile             # Heroku process file
 └── README.md
 
 ## API Endpoints
