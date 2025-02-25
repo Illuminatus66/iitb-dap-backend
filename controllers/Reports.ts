@@ -168,12 +168,16 @@ export const triggerReportGeneration = async (req: Request, res: Response) => {
           throw new Error("SAS API timeout: No response from the server.");
         }
       });
-      
-      if (!sasResponse) {
-        return res.status(500).json({ message: "Invalid SAS API response" });
-      }
+
+    if (!sasResponse) {
+      return res.status(500).json({ message: "Invalid SAS API response" });
+    }
 
     const sasData = sasResponse.data;
+
+    if (sasData.audio_type != "Ok") {
+      return res.status(500).json({ message: "Invalid SAS API response" });
+    }
 
     // Response_time will be set in IST regardless of server location.
     // As I understand it, the response_time is supposed to be when the
