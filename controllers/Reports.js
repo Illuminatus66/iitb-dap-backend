@@ -1,15 +1,15 @@
 import axios from "axios";
 import dayjs from "dayjs";
 import Report from "../models/Reports.js";
-import timezone from "dayjs/plugin/timezone.js"
+import timezone from "dayjs/plugin/timezone.js";
 import utc from "dayjs/plugin/utc.js";
 
-dayjs.extend(utc);
 dayjs.extend(timezone);
+dayjs.extend(utc);
 
 export const fetchAllReports = async (req, res) => {
   try {
-    const reports = await Report.find({});
+    const reports = await Report.find();
     res.status(200).json(reports);
   } catch (error) {
     console.error("Error fetching reports:", error);
@@ -17,10 +17,7 @@ export const fetchAllReports = async (req, res) => {
   }
 };
 
-export const uploadDetailsWithoutAudio = async (
-  req,
-  res
-) => {
+export const uploadDetailsWithoutAudio = async (req, res) => {
   try {
     const detailsUploadData = req.body;
 
@@ -34,7 +31,7 @@ export const uploadDetailsWithoutAudio = async (
       is_report_generated: false,
     });
 
-    const responseData= {
+    const responseData = {
       _id: newReport._id,
       uid: newReport.uid,
       name: newReport.name,
@@ -121,12 +118,7 @@ export const uploadAudio = async (req, res) => {
 
 export const triggerReportGeneration = async (req, res) => {
   try {
-    const {
-      _id,
-      audio_url,
-      reference_text_id,
-      request_time,
-    } = req.body;
+    const { _id, audio_url, reference_text_id, request_time } = req.body;
 
     if (!audio_url.startsWith("https://") || !audio_url.includes("s3")) {
       return res.status(400).json({ message: "Invalid S3 URL" });
@@ -203,8 +195,9 @@ export const triggerReportGeneration = async (req, res) => {
       request_time,
     };
 
-    const updatedReport =
-      await Report.findByIdAndUpdate(_id, updateData, { new: true });
+    const updatedReport = await Report.findByIdAndUpdate(_id, updateData, {
+      new: true,
+    });
     if (!updatedReport) {
       return res.status(404).json({ message: "Report not found" });
     }
