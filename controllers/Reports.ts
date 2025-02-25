@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import axios from "axios";
 import dayjs from "dayjs";
-import { Report } from "../models/Reports";
+import { Report } from "../models/Reports.ts";
 import {
   AudioUploadRequest,
   AudioUploadResponse,
@@ -9,7 +9,7 @@ import {
   DetailsUploadResponse,
   ReportGenerationRequest,
   ReportGenerationResponse,
-} from "./types";
+} from "./types.ts";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 

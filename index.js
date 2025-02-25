@@ -1,8 +1,8 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import reportRoutes from "./routes/Reports";
-import connectDB from "./connectMongoDB";
+import reportRoutes from "./routes/Reports.ts";
+import connectDB from "./connectMongoDB.ts";
 dotenv.config();
 
 connectDB();
