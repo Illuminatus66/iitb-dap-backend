@@ -1,13 +1,12 @@
 {
     "compilerOptions": {
       "target": "ES6",
-      "module": "commonjs",
+      "module": "NodeNext",
       "strict": true,
       "esModuleInterop": true,
       "skipLibCheck": true, 
       "forceConsistentCasingInFileNames": true,
-      "allowImportingTsExtensions": true,
-      "noEmit": true,
+      "allowImportingTsExtensions": false,
       "outDir": "./dist"
     },
     "exclude": ["node_modules"]

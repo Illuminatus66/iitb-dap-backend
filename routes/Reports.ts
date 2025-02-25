@@ -4,7 +4,7 @@ import {
   uploadAudio,
   uploadDetailsWithoutAudio,
   triggerReportGeneration,
-} from "../controllers/Reports.ts";
+} from "../controllers/Reports.js";
 
 const router = express.Router();
 
