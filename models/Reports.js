@@ -23,6 +23,7 @@ const ReportsSchema = new Schema({
   pron_score: { type: Number },
   percent_attempt: { type: Number },
   audio_url: { type: String },
+  correct_text: {type: String },
   request_time: { type: String },
   response_time: { type: String },
 });

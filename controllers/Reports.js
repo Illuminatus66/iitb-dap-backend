@@ -162,6 +162,11 @@ export const triggerReportGeneration = async (req, res) => {
       return res.status(500).json({ message: "Invalid SAS API response" });
     }
 
+    // 1-indexed to maintain consistency with how other details are structured
+    const processedText = sasData.word_scores
+      .map((item, index) => `${index + 1}-${item[0]}`)
+      .join(",");
+
     // Response_time will be set in IST regardless of server location.
     // As I understand it, the response_time is supposed to be when the
     // the SAS API responds, not when the response reaches the frontend
@@ -190,6 +195,7 @@ export const triggerReportGeneration = async (req, res) => {
       // Set by us
       is_report_generated: true,
       response_time,
+      correct_text: processedText,
       // Fields from the request:
       audio_url,
       request_time,

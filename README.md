@@ -79,7 +79,8 @@ Create a `.env` file in the root directory and add the following environment var
 Make sure to replace the placeholder values with your actual credentials and URLs
 
 ## Project Structure
-``` bash
+
+```bash
 iitb_dap_backend/
 |
 │── controllers/
@@ -94,6 +95,7 @@ iitb_dap_backend/
 ├── Procfile        # Heroku process file
 └── README.md
 ```
+
 ## API Endpoints
 
 1. **Fetch All Reports**
