@@ -21,8 +21,28 @@ export const uploadDetailsWithoutAudio = async (req, res) => {
   try {
     const detailsUploadData = req.body;
 
-    // A new document is created with both flags set to false
-    // since no audio is being uploaded in this controller
+
+    if (detailsUploadData._id) {
+      // If _id is present, update the existing document
+      const updatedReport = await Report.findByIdAndUpdate(
+        detailsUploadData._id,
+        {
+          uid: detailsUploadData.uid,
+          name: detailsUploadData.name,
+          story: detailsUploadData.story,
+        },
+        { new: true } // Return the updated document
+      );
+
+      if (!updatedReport) {
+        return res.status(404).json({ message: "Report not found" });
+      }
+
+      return res.status(200).json(updatedReport);
+    }
+
+    // If _id is not present,a new document is created with both flags
+    //  set to false since no audio is being uploaded in this controller
     const newReport = await Report.create({
       uid: detailsUploadData.uid,
       name: detailsUploadData.name,
